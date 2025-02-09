@@ -10,7 +10,7 @@ Type:
 
 data2wav.exe output.csv new.wav
 
-The CSV file shows the value of the right and left channel of a WAV.
+The CSV file shows the values of the right and left channels in a WAV.
 
 As well as the time in seconds for each binary sample:
 
