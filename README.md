@@ -14,6 +14,7 @@ The CSV file shows the values of the right and left channels in a WAV.
 
 As well as the time in seconds for each sample:
 
+
 Sample, Time, Channel1, Channel2
 
 0, 0.000000, 126, 126
