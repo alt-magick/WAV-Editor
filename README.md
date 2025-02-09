@@ -2,7 +2,7 @@
 Edit WAV Files as Spread Sheets
 
 WAV files are made up of a series of ampliudes from quiet to loud.  
-Each sample has a amplitude represented by a numeric value.
+Each sample has a amplitude represented by a number.
 
 Multiple samples create sound waves that we recognize.
 
