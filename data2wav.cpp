@@ -19,7 +19,7 @@ struct WAVHeader {
     uint32_t fmtSize;       // Size of fmt chunk (16 for PCM)
     uint16_t audioFormat;   // PCM = 1
     uint16_t numChannels;   // 1 (mono) or 2 (stereo), etc.
-    uint32_t sampleRate;    // e.g., 22222 Hz (computed from CSV times)
+    uint32_t sampleRate;    // e.g., 44100 Hz (will be read from CSV)
     uint32_t byteRate;      // SampleRate * NumChannels * BitsPerSample/8
     uint16_t blockAlign;    // NumChannels * BitsPerSample/8
     uint16_t bitsPerSample; // Should be 16 for our output
@@ -47,11 +47,31 @@ int main(int argc, char* argv[]) {
     }
 
     std::string line;
-    // Read the CSV header line (e.g., "Time,Channel1,Channel2")
-    if (!std::getline(inFile, line)) {
+    uint32_t sampleRate = 44100; // fallback default
+
+    // === Check for a comment line containing the sample rate ===
+    if (std::getline(inFile, line)) {
+        if (!line.empty() && line[0] == '#') {
+            // Expected format: "# SampleRate: <number>"
+            std::istringstream iss(line);
+            std::string hash, token;
+            iss >> hash >> token; // token should be "SampleRate:"
+            if (token == "SampleRate:" && (iss >> sampleRate)) {
+                // Successfully parsed sample rate.
+            }
+            // Read the next line, which should be the header line.
+            if (!std::getline(inFile, line)) {
+                std::cerr << "Error: CSV file does not contain a header line after the sample rate comment!\n";
+                return 1;
+            }
+        }
+    }
+    else {
         std::cerr << "Error: CSV file is empty!\n";
         return 1;
     }
+
+    // Now 'line' holds the CSV header line.
     std::istringstream headerStream(line);
     std::vector<std::string> headerColumns;
     std::string col;
@@ -62,30 +82,39 @@ int main(int argc, char* argv[]) {
         headerColumns.push_back(col);
     }
     if (headerColumns.size() < 2) {
-        std::cerr << "Error: CSV header must contain at least two columns (Time and one channel)!\n";
+        std::cerr << "Error: CSV header must contain at least two columns (e.g., Sample and one channel)!\n";
         return 1;
     }
-    // The first column is assumed to be "Time", so the number of channels is:
-    int numChannels = headerColumns.size() - 1;
 
-    // Prepare containers for time values and channel samples.
-    std::vector<double> times;
-    // Create a vector for each channel.
+    // Determine how many columns to skip:
+    // If the second column is "Time", then skip two columns ("Sample" and "Time").
+    int headerOffset = 1;
+    if (headerColumns.size() >= 2 && headerColumns[1] == "Time")
+        headerOffset = 2;
+
+    // The remaining columns represent channels.
+    int numChannels = static_cast<int>(headerColumns.size() - headerOffset);
+
+    // Prepare containers for channel samples.
+    // Each channel will have its own vector of samples.
     std::vector< std::vector<int16_t> > channelSamples(numChannels);
 
     // Read each data line.
     while (std::getline(inFile, line)) {
-        if (line.empty()) continue;
+        if (line.empty())
+            continue;
         std::istringstream lineStream(line);
         std::string token;
 
-        // Read the time value.
+        // Read and ignore the first column (sample index).
         if (!std::getline(lineStream, token, ',')) continue;
-        // Trim whitespace.
-        token.erase(token.begin(), std::find_if(token.begin(), token.end(), [](unsigned char c) { return !std::isspace(c); }));
-        token.erase(std::find_if(token.rbegin(), token.rend(), [](unsigned char c) { return !std::isspace(c); }).base(), token.end());
-        double t = std::stod(token);
-        times.push_back(t);
+        // If there is a "Time" column, skip it too.
+        if (headerOffset == 2) {
+            if (!std::getline(lineStream, token, ',')) {
+                std::cerr << "Error: Missing time data in line: " << line << "\n";
+                continue;
+            }
+        }
 
         // For each channel, read the sample.
         for (int ch = 0; ch < numChannels; ch++) {
@@ -93,6 +122,7 @@ int main(int argc, char* argv[]) {
                 std::cerr << "Error: Missing sample data in line: " << line << "\n";
                 break;
             }
+            // Trim whitespace.
             token.erase(token.begin(), std::find_if(token.begin(), token.end(), [](unsigned char c) { return !std::isspace(c); }));
             token.erase(std::find_if(token.rbegin(), token.rend(), [](unsigned char c) { return !std::isspace(c); }).base(), token.end());
             try {
@@ -109,17 +139,9 @@ int main(int argc, char* argv[]) {
     }
     inFile.close();
 
-    // Compute the sample rate from the CSV time values.
-    // (For example, if times[1] - times[0] is ~0.000045 s, sampleRate will be ~22222 Hz.)
-    uint32_t sampleRate = 44100; // fallback default.
-    if (times.size() >= 2) {
-        double dt = times[1] - times[0];
-        if (dt > 0)
-            sampleRate = static_cast<uint32_t>(std::round(1.0 / dt));
-    }
-
     // Interleave samples (if multiple channels) into one vector.
-    size_t numFrames = channelSamples[0].size();  // assuming all channels have the same number of samples.
+    // Assumes all channels have the same number of samples.
+    size_t numFrames = channelSamples[0].size();
     std::vector<int16_t> interleaved;
     interleaved.reserve(numFrames * numChannels);
     for (size_t i = 0; i < numFrames; i++) {
@@ -136,7 +158,7 @@ int main(int argc, char* argv[]) {
     wavHeader.fmtSize = 16;
     wavHeader.audioFormat = 1;
     wavHeader.numChannels = numChannels;
-    wavHeader.sampleRate = sampleRate;
+    wavHeader.sampleRate = sampleRate;  // Use the sample rate from the CSV comment.
     wavHeader.bitsPerSample = 16;
     wavHeader.blockAlign = wavHeader.numChannels * (wavHeader.bitsPerSample / 8);
     wavHeader.byteRate = wavHeader.sampleRate * wavHeader.blockAlign;
@@ -150,7 +172,7 @@ int main(int argc, char* argv[]) {
     outFile.close();
 
     std::cout << "CSV file converted to WAV successfully.\n"
-        << "Computed sample rate: " << sampleRate << " Hz\n"
+        << "Using sample rate: " << sampleRate << " Hz\n"
         << "Number of channels: " << numChannels << "\n";
     return 0;
 }

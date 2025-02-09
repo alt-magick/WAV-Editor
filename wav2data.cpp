@@ -54,19 +54,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Write the CSV header line.
-    // The CSV-to-WAV converter expects a header of the form:
-    //   Time,Channel1[,Channel2,...]
-    outFile << "Time";
-    for (int ch = 1; ch <= header.numChannels; ++ch) {
-        outFile << ",Channel" << ch;
-    }
-    outFile << "\n";
-
-    // Compute the time step (in seconds) per frame.
-    double timeStep = 1.0 / header.sampleRate;
-    double currentTime = 0.0;
-
     // Read the audio data into a vector.
     std::vector<uint8_t> audioData(header.dataSize);
     inFile.read(reinterpret_cast<char*>(audioData.data()), header.dataSize);
@@ -74,18 +61,29 @@ int main(int argc, char* argv[]) {
 
     // Calculate the number of frames (each frame contains one sample per channel).
     size_t numFrames = audioData.size() / header.numChannels;
+    double timeStep = 1.0 / header.sampleRate; // time difference between samples
 
-    // Write each frame as one CSV line: time and the sample(s) for that frame.
+    // === Write a comment line with the original sample rate ===
+    outFile << "# SampleRate: " << header.sampleRate << "\n";
+
+    // Write the CSV header line.
+    // Now the CSV has: Sample,Time,Channel1[,Channel2,...]
+    outFile << "Sample,Time";
+    for (int ch = 1; ch <= header.numChannels; ++ch) {
+        outFile << ",Channel" << ch;
+    }
+    outFile << "\n";
+
+    // Write each frame: sample index, exact time, and the sample(s) for that frame.
     for (size_t frame = 0; frame < numFrames; ++frame) {
-        // Write the time column with 6 decimal places.
-        outFile << std::fixed << std::setprecision(6) << currentTime;
+        double currentTime = frame * timeStep;
+        outFile << frame << "," << std::fixed << std::setprecision(6) << currentTime;
         // Write one sample for each channel.
         for (int ch = 0; ch < header.numChannels; ++ch) {
             size_t index = frame * header.numChannels + ch;
             outFile << "," << static_cast<int>(audioData[index]);
         }
         outFile << "\n";
-        currentTime += timeStep;
     }
 
     outFile.close();
