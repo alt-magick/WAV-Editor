@@ -3,11 +3,11 @@ Edit WAV Files as Spread Sheets
 
 WAV files are made up of a series of ampliudes from quiet to loud.  
 
-Each sample has a amplitude represented by a number.
+Each sample has an amplitude represented by a number.
 
 Multiple samples create sound waves that we recognize.
 
-This program creates a spread sheet made up of each sample in a wav.
+This program creates a spread sheet made up of each sample in a wav file.
 
 To convert a WAV file into CSV type:
 
