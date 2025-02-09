@@ -6,7 +6,7 @@ Each sample has a amplitude represented by a number.
 
 Multiple samples create sound waves that we recognize.
 
-This program creates a spread sheet file made up of each sample in a wav.
+This program creates a spread sheet made up of each sample in a wav.
 
 To convert a WAV file into CSV type:
 
