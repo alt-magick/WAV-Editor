@@ -6,7 +6,7 @@ Convert a WAV file to CSV by typing:
 wav2data.exe file.wav output.csv
 
 Once you finish editing the CSV file in Excel or Calc,
-Type:
+type:
 
 data2wav.exe output.csv new.wav
 
