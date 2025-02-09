@@ -2,10 +2,12 @@
 Edit WAV Files as Spread Sheets
 
 WAV files are made up of a series of ampliudes from quiet to loud.  
-Each sample has a value for its amplitude. 
+Each sample has a amplitude represented by a numeric value. 
 Multiple samples create sound waves that we recognize.
 
-Convert a WAV file to CSV by typing:
+This program makes a spread sheet file of each sample in a wav.
+
+To convert a WAV file int CSV type:
 
 wav2data.exe file.wav output.csv
 
@@ -16,8 +18,9 @@ data2wav.exe output.csv new.wav
 
 The CSV file shows the values of the right and left channels in a WAV.
 
-As well as the time in seconds for each sample:
+As well as the time in seconds for each sample.
 <br><br>
+Your csv file should look like this:
 
 Sample, Time, Channel1, Channel2
 
