@@ -1,5 +1,5 @@
 # WAV-Editor
-Edit WAV Files As Spread Sheets
+Edit WAV Files as Spread Sheets
 
 Convert a WAV file to CSV by typing:
 
