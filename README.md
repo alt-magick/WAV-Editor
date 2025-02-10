@@ -9,6 +9,8 @@ Multiple samples create sound waves that we recognize.
 
 This program creates a spread sheet made up of each sample in a wav file.
 
+Currently only 8-bit PCM WAV files are supported.
+
 To convert a WAV file into CSV type:
 
 wav2data.exe file.wav output.csv
