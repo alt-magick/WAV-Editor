@@ -33,14 +33,16 @@ Your csv file should look something like this:
 
 | Sample  | Time | Channel 1  | Channel 2 |
 | ------------- | ------------- | ------------- | ------------- |
-| 1  | 0  | Content Cell  | Content Cell  |
-| 2  | 0.000045  | Content Cell  | Content Cell  |
-| 3  | 0.000091  | Content Cell  | Content Cell  |
-| 4  | 0.000136  | Content Cell  | Content Cell  |
-| 5  | 0.000181  | Content Cell  | Content Cell  |
-| 6  | 0.000227 | Content Cell  | Content Cell  |
-| 7  | 0.000272 | Content Cell  | Content Cell  |
-| 8  | 0.000317  | Content Cell  | Content Cell  |
-| 9  | 0.000363  | Content Cell  | Content Cell  |
-| 10  | 0.000408  | Content Cell  | Content Cell  |
+| 1  | 0  | 139 | 139  |
+| 2  | 0.000045  | 136  | 136  |
+| 3  | 0.000091  | 117  | 117  |
+| 4  | 0.000136  | 120  | 120  |
+| 5  | 0.000181  | 140  | 140  |
+| 6  | 0.000227 | 119  | 119  |
+| 7  | 0.000272 | 138  | 138  |
+| 8  | 0.000317  | 116  | 116  |
+| 9  | 0.000363  | 136 | 136  |
+| 10  | 0.000408  | 116  | 116  |
+
+
 
