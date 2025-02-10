@@ -30,31 +30,8 @@ As well as the time in seconds for each sample.
 Your csv file should look something like this:
 
 
-| Sample  | Time | Channel 1 | Channel 2 |
-| ------------- | ------------- |--------
-| 0 | 0.000000 | 126 | 126 |
-| 1 | 0.000023 | 125 | 125 |
 
-
-Sample, Time, Channel1, Channel2
-
-0, 0.000000, 126, 126
-
-1, 0.000023, 125, 125
-
-2, 0.000045, 126, 126
-
-3, 0.000068, 128, 128
-
-4, 0.000091, 129, 129
-
-5, 0.000113, 129, 129
-
-6, 0.000136, 129, 129
-
-7, 0.000159, 130, 130
-
-8, 0.000181, 130, 130
-
-9, 0.000204, 129, 129
-
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
