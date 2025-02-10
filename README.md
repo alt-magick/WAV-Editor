@@ -17,7 +17,7 @@ You can now edit it in Excel or Calc.
 
 And ChatGPT can modify your CSV file with AI.
 
-When you finish editing type:
+When you finish type:
 
 data2wav.exe output.csv new.wav
 
