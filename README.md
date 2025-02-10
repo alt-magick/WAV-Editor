@@ -26,6 +26,7 @@ And you will have a new WAV file.
 The CSV file shows the values of the right and left channels in a WAV.
 
 As well as the time in seconds for each sample.
+<br><br>
 
 Your csv file should look something like this:
 <br><br>
