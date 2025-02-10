@@ -13,10 +13,15 @@ To convert a WAV file into CSV type:
 
 wav2data.exe file.wav output.csv
 
-Once you finish editing the CSV file in Excel or Calc,
-type:
+You can now edit it in Excel or Calc.
+
+And ChatGPT can modify your CSV file with AI.
+
+When you finish editing type:
 
 data2wav.exe output.csv new.wav
+
+And you will have a new WAV file.
 
 The CSV file shows the values of the right and left channels in a WAV.
 
