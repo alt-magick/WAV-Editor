@@ -29,6 +29,13 @@ As well as the time in seconds for each sample.
 <br><br>
 Your csv file should look something like this:
 
+
+| Sample  | Time | Channel 1 | Channel 2 |
+| ------------- | ------------- |--------
+| 0 | 0.000000 | 126 | 126 |
+| 1 | 0.000023 | 125 | 125 |
+
+
 Sample, Time, Channel1, Channel2
 
 0, 0.000000, 126, 126
