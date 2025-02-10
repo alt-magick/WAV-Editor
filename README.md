@@ -1,5 +1,5 @@
 # WAV-Editor
-Edit WAV Files as Spread Sheets
+Edit WAV Files As Spread Sheets
 
 WAV files are made up of a series of ampliudes from quiet to loud.  
 
